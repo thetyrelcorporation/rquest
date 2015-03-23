@@ -24,7 +24,7 @@ Or install it yourself as:
 
 ## Simple Get Request
 
-Its basic setup involves setting the uri and action.
+Its basic setup involves setting the uri and action. Its send method will execute the rquest and return the body. You can access the full request object and the response time if you need it.
 
 ```ruby
 rquest = RQuest.new({verb: :get, uri: "https://google.com"})
