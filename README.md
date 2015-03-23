@@ -22,9 +22,9 @@ Or install it yourself as:
 
     $ gem install rquest
 
-## Simple Get Request
+## Simple GET Request
 
-Its basic setup involves setting the uri and action. Its send method will execute the rquest and return the body. You can access the full request object and the response time if you need it.
+Its basic setup involves setting the uri and action. Its send method will execute the rquest and return the body. You can access the full request object and the response time if you need them.
 
 ```ruby
 rquest = RQuest.new({verb: :get, uri: "https://google.com"})
@@ -40,6 +40,20 @@ rquest = RQuest.new({verb: :get, uri: "https://google.com?q=testing", q_params: 
 ```
 
 This will result in a request with a URI of http://google.com?q=testing&token=foo behind the sceens
+
+## Auto SSL
+Any uri with https will set use_ssl on the request object automatically. No more.
+
+```ruby
+https.use_ssl = true
+```
+
+## Form data POST/PUT/PATCH/DELETE/OPTIONS Requests
+
+```ruby
+rquest = RQuest.new({verb: :get, uri: "https://google.com", headers: {"User-Agent" => "A Freaking Spaceship"} })
+```
+
 
 ## Development
 
