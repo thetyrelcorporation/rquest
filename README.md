@@ -50,10 +50,25 @@ https.use_ssl = true
 
 ## Form data POST/PUT/PATCH/DELETE/OPTIONS Requests
 
+All controlled from the same settings hash with the payload key
+
 ```ruby
-rquest = RQuest.new({verb: :get, uri: "https://google.com", headers: {"User-Agent" => "A Freaking Spaceship"} })
+rquest = RQuest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"} })
+rquest.send
 ```
 
+Alright the best part for last
+
+## Auto multipart forum
+
+Just pass file objects into the files key and everything will be handled for you. It will automatically switch to multipart and detect mime types!
+
+```ruby
+f1 = File.open("path/to/file.txt")
+f2 = File.open("path/to/file.jpg")
+rquest = RQuest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, files: {file_field_1: f1, file_field_2: f2} })
+rquest.send
+```
 
 ## Development
 
