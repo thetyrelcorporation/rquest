@@ -1,8 +1,10 @@
 # Rquest
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rquest`. To experiment with that code, run `bin/console` for an interactive prompt.
+A helper library to easily define restful web requests in ruby.
 
-TODO: Delete this and the text above, and describe your gem
+Bassically I am tiered of constantly relooking up NET HTTP blog post to try and remember how to say override the default headers or attatch a file as a multipart post request. Also there are things about the ruby request generation process I felt I could improve such as, autodetecting the need for ssl from the URI and providing a clean DSL for request definition. As well as cleaner file attatchment.
+
+RQuest makes it easy to build request and gives you full control over every aspect of the request. I modeled it after the chrome extension postman. Everything you can do with postman you can do with RQuest and it follows the same intuitive work flow.
 
 ## Installation
 
@@ -20,9 +22,24 @@ Or install it yourself as:
 
     $ gem install rquest
 
-## Usage
+## Simple Get Request
 
-TODO: Write usage instructions here
+Its basic setup involves setting the uri and action.
+
+```ruby
+rquest = RQuest.new({verb: :get, uri: "https://google.com"})
+response_body = rquest.send
+response_time = rquest.response_time
+full_request_object = rquest.response
+```
+
+You can easily combine query params with the uri and the settings hash
+
+```ruby
+rquest = RQuest.new({verb: :get, uri: "https://google.com?q=testing", q_params: {token: "foo"}})
+```
+
+This will result in a request with a URI of http://google.com?q=testing&token=foo behind the sceens
 
 ## Development
 
