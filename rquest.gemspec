@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "rquest"
   spec.version       = Rquest::VERSION
   spec.authors       = ["The Tyrel Corporation"]
-  spec.email         = ["tyrelrichey@gmail.com"]
+  spec.email         = ["cloud.tycorp@gmail.com"]
 
   if spec.respond_to?(:metadata)
   end
