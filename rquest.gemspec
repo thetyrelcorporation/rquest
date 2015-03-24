@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
 	spec.add_development_dependency "rspec"
 	spec.add_development_dependency "guard"
 	spec.add_development_dependency "guard-rspec"
-	spec.add_development_dependency "multipart-post"
-	spec.add_development_dependency  "mimemagic"
+
+	spec.add_runtime_dependency "multipart-post"
+	spec.add_runtime_dependency  "mimemagic"
 end
