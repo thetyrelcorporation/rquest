@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class Rquest::Requestor
-	attr_accessor :uri, :verb, :headers, :http_client, :http_request_client, :body, :settings
+	attr_accessor :uri, :verb, :headers, :http_client, :http_request_client, :body, :settings, :cookies, :files
 end
 
 describe Rquest::Requestor do
@@ -60,6 +60,17 @@ describe Rquest::Requestor do
 			query_settings[:uri] += "?test=testing"
 			q_req = Rquest::new( query_settings )
 			expect( q_req.respond_to?(:q_params) ).to be true
+			expect( q_req.q_params[:test] ).to eq "testing"
+		end
+
+		it "Q params should persist for across requests" do
+			query_settings = basic_settings
+			query_settings[:uri] += "?test=testing"
+			q_req = Rquest::new( query_settings )
+			expect( q_req.respond_to?(:q_params) ).to be true
+			expect( q_req.q_params[:test] ).to eq "testing"
+			new_uri = query_settings[:uri].split("?").first
+			q_req.update({uri: new_uri})
 			expect( q_req.q_params[:test] ).to eq "testing"
 		end
 
@@ -154,7 +165,7 @@ describe Rquest::Requestor do
 			}
 			rquest = Rquest::Requestor::new( settings )
 
-			file = rquest.settings[:files].first
+			file = rquest.files.first
 			expect( file.first ).to eq :da_file_field
 			expect( file.last.content_type ).to eq "text/plain"
 		end
@@ -174,7 +185,7 @@ describe Rquest::Requestor do
 			}
 			rquest = Rquest::Requestor::new( settings )
 
-			file = rquest.settings[:files].first
+			file = rquest.files.first
 			expect( file.first ).to eq :da_file_field
 			expect( file.last.content_type ).to eq "text/plain"
 		end
@@ -194,8 +205,9 @@ describe Rquest::Requestor do
 				da_file_field: the_file
 			}
 			rquest = Rquest::Requestor::new( settings )
+			expect(rquest.http_request_client["User-Agent"]).to eq fire_fox_agent
 
-			file = rquest.settings[:files].first
+			file = rquest.files.first
 			expect( file.first ).to eq :da_file_field
 			expect( file.last.content_type ).to eq "image/jpeg"
 		end
@@ -213,13 +225,50 @@ describe Rquest::Requestor do
 
 		it "Should stash the whole response and allow read" do
 			basic_requestor.send
-			expect( basic_requestor.response.class ).to be Net::HTTPOK
+			expect( basic_requestor.last_response.class ).to be Net::HTTPOK
 		end
 
 		it "Should store request time" do
 			basic_requestor.send
-			expect( basic_requestor.respond_to?(:response_time) ).to be true
-			expect( basic_requestor.response_time.class ).to be Float
+			expect( basic_requestor.respond_to?(:last_response_time) ).to be true
+			expect( basic_requestor.last_response_time.class ).to be Float
+		end
+	end
+
+
+	describe "Sessions" do
+		let(:session_settings) {
+			{
+				verb: :get,
+				uri: "https://marijuana-jobs.us"
+			}
+		}
+		let(:session_rquest) {
+			Rquest::new(session_settings)
+		}
+
+		it "Should have reasonable default headers for healthy automatic sessions" do
+			expect(session_rquest.http_request_client["User-Agent"]).to eq fire_fox_agent
+			expect(session_rquest.http_request_client["Accept"]).to eq "*/*"
+		end
+
+		describe "Cookies" do
+			it "Should initialize headers with cookies settings" do
+				settings = session_settings
+				settings[:cookies] = {
+					"Some-Cookie" => "Some Value",
+					"Foo" => "Bar"
+				}
+				rquest = Rquest::new(settings)
+				expect( rquest.cookies ).to eq settings[:cookies]
+				expect( rquest.http_request_client["Cookie"] ).to eq "Some-Cookie=Some Value; Foo=Bar;"
+			end
+
+			it "Should update cookies after each request" do
+				rquest = Rquest::new( {verb: :get, uri: "https://marijuana-jobs.us"} )
+				rquest.send
+				expect( rquest.cookies["_marijuana_jobs_session"].nil? ).to be false
+			end
 		end
 	end
 

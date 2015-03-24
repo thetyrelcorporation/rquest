@@ -20,6 +20,12 @@ describe Hash do
 		expect( h.respond_to?(:to_q_param_string) ).to be true
 		expect( h.to_q_param_string ).to eq "q=testing&token=testing"
 	end
+
+	it "Should have a to_cookie_string method" do
+		h = {"Some-Cookie" => "Some Value", "_another_cookie" => "Blah"}
+		expect( h.respond_to?(:to_cookie_string) ).to be true
+		expect( h.to_cookie_string ).to eq "Some-Cookie=Some Value; _another_cookie=Blah;"
+	end
 end
 
 describe String do
@@ -29,6 +35,14 @@ describe String do
 		h = s.to_q_param_hash
 		expect( h[:b] ).to eq "1"
 		expect( h[:c] ).to eq "2"
+	end
+
+	it "Should have to_cookies_hash" do
+		s = "Some-Cookie=Some Value; _another_cookie=Blah;"
+		expect( s.respond_to?( :to_cookies_hash ) ).to be true
+		h = s.to_cookies_hash
+		test_h = {"Some-Cookie" => "Some Value", "_another_cookie" => "Blah"}
+		expect( h ).to eq test_h
 	end
 end
 

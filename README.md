@@ -29,8 +29,8 @@ Its basic setup involves setting the uri and action. Its send method will execut
 ```ruby
 rquest = RQuest.new({verb: :get, uri: "https://google.com"})
 response_body = rquest.send
-response_time = rquest.response_time
-full_request_object = rquest.response
+response_time = rquest.last_response_time
+response_object = rquest.last_response
 ```
 
 You can easily combine query params with the uri and the settings hash
@@ -53,7 +53,7 @@ https.use_ssl = true
 All controlled from the same settings hash with the payload key
 
 ```ruby
-rquest = RQuest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"} })
+rquest = RQuest.new({verb: :post, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"} })
 rquest.send
 ```
 
@@ -67,6 +67,50 @@ Just pass file objects into the files key and everything will be handled for you
 f1 = File.open("path/to/file.txt")
 f2 = File.open("path/to/file.jpg")
 rquest = RQuest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, files: {file_field_1: f1, file_field_2: f2} })
+rquest.send
+```
+
+## Sessions
+
+Rquest is built to behave like a fresh incognito browser. Every time you apply send it will add the response to the transactions attribute and set the last_response and last_response_time.
+
+Simply call update to change what you need before the next send like so. New settings will be merged so they will either override old ones ore creat new ones. Any non specified setting will remain untouched from the last request.
+
+```ruby
+rquest = RQuest.new({verb: :get, uri: "https://google.com?q=testing", q_params: {token: "foo"}})
+rquest.send
+rquest.update({q_params: {q: "other search value"}}
+rquest.send
+first_query = rquest.transactions.first
+last_query = rquest.transactions.last
+```
+
+Transactions are stored as has with their request, response and response time available for future reference. Continuing from above we could.
+
+```ruby
+old_request = first_query[:request]
+old_response = first_query[:response]
+time_it_took = first_query[:response_time]
+```
+
+## Cookies
+
+You can set cookies for a request by adding them to the settings[:cookies] like
+
+```ruby
+rquest = RQuest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, cookies: {"MySpecialCookie" => "SomeSuperSecretValue"} })
+```
+
+Any response will add/merge any cookies in the "Set-Cookie" header of the response to your next request
+
+```ruby
+rquest = RQuest.new({verb: :post, uri: "https://somesite.com/sessions", payload: {username: "foobar", password: "SuperSecret"}})
+rquest.send
+```
+If this authenticates correctly then the server will send the right Set-Cookie so then you can do something like.
+
+```ruby
+rquest.update({uri: "https://somesite.com/mydashboard"}
 rquest.send
 ```
 
