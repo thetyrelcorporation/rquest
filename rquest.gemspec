@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.summary       = %q{A helper library to easily define restful web requests in ruby. It wraps NET::HTTP in an intuitive work flow modeled off of the Postman Chrome extension.}
-  spec.description   = %q{RQuest makes it easy to build request and gives you full control over every aspect of the request. I modeled it after the chrome extension postman. Everything you can do with postman you can do with RQuest and it follows the same intuitive work flow.}
+  spec.description   = %q{RQuest makes it easy to build request and gives you full control over every aspect of the request. I modeled it after the chrome extension postman. Everything you can do with postman you can do with RQuest and it follows the same intuitive work flow. It also has support for session managment.}
   spec.homepage      = "https://github.com/thetyrelcorporation/rquest"
   spec.license       = "MIT"
 

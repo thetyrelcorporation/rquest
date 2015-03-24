@@ -2,9 +2,11 @@
 
 A helper library to easily define restful web requests in ruby.
 
-Bassically I am tiered of constantly relooking up NET HTTP blog post to try and remember how to say override the default headers or attatch a file as a multipart post request. Also there are things about the ruby request generation process I felt I could improve such as, autodetecting the need for ssl from the URI and providing a clean DSL for request definition. As well as cleaner file attatchment.
+Bassically I am tiered of constantly relooking up NET HTTP blog post to try and remember how to say override the default headers or attatch a file as a multipart post request. Also there are things about the ruby request generation process I felt I could improve such as, autodetecting the need for ssl from the URI and providing a clean DSL for request definition, as well as cleaner file attatchment.
 
 RQuest makes it easy to build request and gives you full control over every aspect of the request. I modeled it after the chrome extension postman. Everything you can do with postman you can do with RQuest and it follows the same intuitive work flow.
+
+In addition Rquest is an object that can handle a full session request cycle. You can say log in have the authentication cookies set by the server and then proceed to parse your dashboard.
 
 ## Installation
 
