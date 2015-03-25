@@ -39,6 +39,7 @@ module Rquest
 			@headers = @headers.merge( @settings[:headers] )
 			@cookies = @cookies.merge( @settings[:cookies] )
 			@q_params = @q_params.merge( @settings[:q_params] )
+			@payload = @settings[:payload] unless @settings[:payload].nil?
 		end
 
 		def send
