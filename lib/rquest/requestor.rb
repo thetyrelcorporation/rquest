@@ -64,7 +64,10 @@ module Rquest
 		end
 
 		def uri_path
-			@uri.path.empty? ? "/" : @uri.path
+			uri = [(@uri.path.empty? ? "/" : @uri.path)]
+			url, params = @settings[:uri].split("?")
+			uri.push params if params
+			uri.join("?")
 		end
 
 		def setup_files

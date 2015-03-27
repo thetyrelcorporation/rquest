@@ -272,4 +272,19 @@ describe Rquest::Requestor do
 		end
 	end
 
+	describe "Requests" do
+		it "Should preform a proper get request" do
+			rquest = Rquest::new({verb: :get, uri: "http://thechive.com"})
+			body = rquest.send
+			expect(body.scan("theCHIVE - Funny Photos and Funny Videos - Keep Calm and Chive On").any?).to be true
+		end
+
+		it "Should preform a proper get request with q params" do
+			q = "testing"
+			rquest = Rquest::new({verb: :get, uri: "https://www.google.com?q=#{q}"})
+			body = rquest.send
+			expect( body.scan(/#{q}/i).any? ).to be true
+		end
+	end
+
 end
