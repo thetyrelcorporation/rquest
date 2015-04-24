@@ -4,7 +4,7 @@ A helper library to easily define restful web requests in ruby.
 
 Bassically I am tiered of constantly relooking up NET HTTP blog post to try and remember how to say override the default headers or attatch a file as a multipart post request. Also there are things about the ruby request generation process I felt I could improve such as, autodetecting the need for ssl from the URI and providing a clean DSL for request definition, as well as cleaner file attatchment.
 
-RQuest makes it easy to build request and gives you full control over every aspect of the request. I modeled it after the chrome extension postman. Everything you can do with postman you can do with RQuest and it follows the same intuitive work flow.
+Rquest makes it easy to build request and gives you full control over every aspect of the request. I modeled it after the chrome extension postman. Everything you can do with postman you can do with Rquest and it follows the same intuitive work flow.
 
 In addition Rquest is an object that can handle a full session request cycle. You can say log in have the authentication cookies set by the server and then proceed to parse your dashboard.
 
@@ -29,7 +29,7 @@ Or install it yourself as:
 Its basic setup involves setting the uri and action. Its send method will execute the rquest and return the body. You can access the full request object and the response time if you need them.
 
 ```ruby
-rquest = RQuest.new({verb: :get, uri: "https://google.com"})
+rquest = Rquest.new({verb: :get, uri: "https://google.com"})
 response_body = rquest.send
 response_time = rquest.last_response_time
 response_object = rquest.last_response
@@ -38,7 +38,7 @@ response_object = rquest.last_response
 You can easily combine query params with the uri and the settings hash
 
 ```ruby
-rquest = RQuest.new({verb: :get, uri: "https://google.com?q=testing", q_params: {token: "foo"}})
+rquest = Rquest.new({verb: :get, uri: "https://google.com?q=testing", q_params: {token: "foo"}})
 ```
 
 This will result in a request with a URI of http://google.com?q=testing&token=foo behind the sceens
@@ -55,7 +55,7 @@ https.use_ssl = true
 All controlled from the same settings hash with the payload key
 
 ```ruby
-rquest = RQuest.new({verb: :post, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"} })
+rquest = Rquest.new({verb: :post, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"} })
 rquest.send
 ```
 
@@ -68,7 +68,7 @@ Just pass file objects into the files key and everything will be handled for you
 ```ruby
 f1 = File.open("path/to/file.txt")
 f2 = File.open("path/to/file.jpg")
-rquest = RQuest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, files: {file_field_1: f1, file_field_2: f2} })
+rquest = Rquest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, files: {file_field_1: f1, file_field_2: f2} })
 rquest.send
 ```
 
@@ -79,7 +79,7 @@ Rquest is built to behave like a fresh incognito browser. Every time you apply s
 Simply call update to change what you need before the next send like so. New settings will be merged so they will either override old ones ore creat new ones. Any non specified setting will remain untouched from the last request.
 
 ```ruby
-rquest = RQuest.new({verb: :get, uri: "https://google.com?q=testing", q_params: {token: "foo"}})
+rquest = Rquest.new({verb: :get, uri: "https://google.com?q=testing", q_params: {token: "foo"}})
 rquest.send
 rquest.update({q_params: {q: "other search value"}}
 rquest.send
@@ -100,13 +100,13 @@ time_it_took = first_query[:response_time]
 You can set cookies for a request by adding them to the settings[:cookies] like
 
 ```ruby
-rquest = RQuest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, cookies: {"MySpecialCookie" => "SomeSuperSecretValue"} })
+rquest = Rquest.new({verb: :get, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, cookies: {"MySpecialCookie" => "SomeSuperSecretValue"} })
 ```
 
 Any response will add/merge any cookies in the "Set-Cookie" header of the response to your next request
 
 ```ruby
-rquest = RQuest.new({verb: :post, uri: "https://somesite.com/sessions", payload: {username: "foobar", password: "SuperSecret"}})
+rquest = Rquest.new({verb: :post, uri: "https://somesite.com/sessions", payload: {username: "foobar", password: "SuperSecret"}})
 rquest.send
 ```
 If this authenticates correctly then the server will send the right Set-Cookie so then you can do something like.
