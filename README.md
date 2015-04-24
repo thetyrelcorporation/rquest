@@ -59,6 +59,13 @@ rquest = Rquest.new({verb: :post, uri: "https://google.com", payload: {a_field: 
 rquest.send
 ```
 
+The default body style is key=value&other_key=other_value however you can set it to a json body if you need like so
+
+```ruby
+rquest = Rquest.new({verb: :post, uri: "https://google.com", payload: {a_field: "stuff", another_field: "more stuff"}, form_type: :json })
+rquest.send
+```
+
 Alright the best part for last
 
 ## Auto multipart forum

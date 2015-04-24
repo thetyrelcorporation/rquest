@@ -146,6 +146,21 @@ describe Rquest::Requestor do
 			expect( req.http_request_client.body ).to eq "form_field_1=testing&form_field_2=onetwothree"
 		end
 
+		it "Should use json body requests if set" do
+			settings = compex_uri_settings
+			settings[:form_type] = :json
+			settings[:headers] = {
+				"User-Agent" => fire_fox_agent
+			}
+			settings[:payload] = {
+				form_field_1: "testing",
+				form_field_2: "onetwothree"
+			}
+			req = Rquest::Requestor::new( settings )
+			expect( req.respond_to?(:body) ).to be true
+			expect( req.http_request_client.body ).to eq "{\"form_field_1\":\"testing\",\"form_field_2\":\"onetwothree\"}"
+		end
+
 		let(:a_file) {
 			File.open("#{Dir.pwd}/Gemfile")
 		}

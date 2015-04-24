@@ -4,6 +4,7 @@ require 'mimemagic'
 require 'benchmark'
 require "rquest/core_overrides"
 require "rquest/requestor"
+require 'json'
 
 module Rquest
 	class << self

@@ -9,6 +9,7 @@ module Rquest
 		def update( settings={} )
 			@settings ||= {}
 			@settings = @settings.merge( settings )
+			@settings[:form_type] ||= :http
 			apply_default_settings
 			merge_settings
 			@verb = @settings[:verb].to_sym 
@@ -116,7 +117,11 @@ module Rquest
 			unless @files.any?
 				klass = Rquest::client_class_for_verb( @verb )
 				@http_request_client = klass.send(:new, uri_path)
-				@http_request_client.set_form_data( @settings[:payload] )
+				if @settings[:form_type] == :http
+					@http_request_client.set_form_data( @settings[:payload] )
+				elsif @settings[:form_type] == :json
+					@http_request_client.body = @settings[:payload].to_json
+				end
 			else
 				klass = Rquest::client_class_for_verb( @verb, true )
 				multi_part_params = @settings[:payload].merge( @files )
