@@ -11,7 +11,7 @@ In addition Rquest is an object that can handle a full session request cycle. Yo
 ## Credit where credit is due
 - Special thanks to nicksieger for the multipart-post gem.
 - Special thanks to minad for the mimemagic gem.
-Both of these were crucial in creating the easy file upload feature.
+- Both of these were crucial in creating the easy file upload feature.
 
 ## Installation
 
