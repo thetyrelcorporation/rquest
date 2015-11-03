@@ -104,6 +104,9 @@ module Rquest
 
 		def set_headers
 			set_cookies if @cookies.any?
+			if @settings[:form_type] == :json
+				@http_request_client["Content-Type"] = "application/json"
+			end
 			@headers.each do |key, value|
 				@http_request_client[key.to_s] = value.to_s
 			end
